@@ -110,6 +110,31 @@ class Vector4Tests: XCTestCase {
         XCTAssertEqual(v1/v2, v3)
     }
 
+    func testPointers() {
+        var v0 = vec4(0, 1, 2, 3)
+        let v1 = vec4(20, 21, 22, 23)
+
+        v0.withUnsafePointer { pointer in
+            for i in 0..<4 {
+                XCTAssertEqual(pointer[i], Float(i))
+            }
+        }
+
+        v0.withUnsafeMutablePointer { pointer in
+            for i in 0..<4 {
+                pointer[i] += 20
+            }
+        }
+
+        v0.withUnsafeBufferPointer { buffer in
+            for (i, element) in buffer.enumerated() {
+                XCTAssertEqual(element, Float(i + 20))
+            }
+        }
+
+        XCTAssertEqual(v0, v1)
+    }
+
     static var allTests = [
         ("testInit", testInit),
         ("testAddFloat", testAddFloat),
@@ -120,6 +145,7 @@ class Vector4Tests: XCTestCase {
         ("testMulInt", testMulInt),
         ("testMulUInt", testMulUInt),
         ("testDivFloat", testDivFloat),
-        ("testDivInt", testDivInt)
+        ("testDivInt", testDivInt),
+        ("testPointers", testPointers)
     ]
 }

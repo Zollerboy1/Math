@@ -22,6 +22,8 @@
 public struct Quaternion<T: FloatingPointArithmeticType>: MatrixType, ExpressibleByArrayLiteral {
     public typealias Element = T
 
+    public static var elementCount: Int { 4 }
+
     public var x: T, y: T, z: T, w: T
 
     public var elements: [Element] {

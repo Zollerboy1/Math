@@ -26,6 +26,8 @@ import simd
 public struct Matrix4x2<T: ArithmeticType>: MatrixType {
     public typealias Element = T
 
+    public static var elementCount: Int { 4 * 2 }
+
     private var x: Vector2<T>, y: Vector2<T>, z: Vector2<T>, w: Vector2<T>
 
     public subscript(column: Int) -> Vector2<T> {

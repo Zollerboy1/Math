@@ -34,6 +34,8 @@ extension Float {
 public struct Complex<T: FloatingPointArithmeticType>: MatrixType, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, ExpressibleByArrayLiteral {
     public typealias Element = T
 
+    public static var elementCount: Int { 2 }
+
     public var real: T
     public var imag: T
 

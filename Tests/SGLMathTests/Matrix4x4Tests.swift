@@ -119,12 +119,49 @@ class Matrix4x4Tests: XCTestCase {
         XCTAssertEqual(m0, m1)
     }
 
+    func testPointers() {
+        var m0 = mat4(
+            vec4(0, 1, 2, 3),
+            vec4(4, 5, 6, 7),
+            vec4(8, 9, 10, 11),
+            vec4(12, 13, 14, 15)
+        )
+
+        let m1 = mat4(
+            vec4(20, 21, 22, 23),
+            vec4(24, 25, 26, 27),
+            vec4(28, 29, 30, 31),
+            vec4(32, 33, 34, 35)
+        )
+
+        m0.withUnsafePointer { pointer in
+            for i in 0..<16 {
+                XCTAssertEqual(pointer[i], Float(i))
+            }
+        }
+
+        m0.withUnsafeMutablePointer { pointer in
+            for i in 0..<16 {
+                pointer[i] += 20
+            }
+        }
+
+        m0.withUnsafeBufferPointer { buffer in
+            for (i, element) in buffer.enumerated() {
+                XCTAssertEqual(element, Float(i + 20))
+            }
+        }
+
+        XCTAssertEqual(m0, m1)
+    }
+
     static var allTests = [
         ("testIdentityInits", testIdentityInits),
         ("testCommmonInits", testCommmonInits),
         ("testDivide", testDivide),
         ("testMultiplyWith2x4", testMultiplyWith2x4),
         ("testMultiplyVector", testMultiplyVector),
-        ("testMultiArray", testMultiArray)
+        ("testMultiArray", testMultiArray),
+        ("testPointers", testPointers)
     ]
 }

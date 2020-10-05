@@ -22,6 +22,8 @@
 public struct Vector3b: BooleanVectorType {
     public typealias BooleanVector = Vector3b
 
+    public static var elementCount: Int { 3 }
+
     public var x: Bool, y: Bool, z: Bool
 
     public var r: Bool { get { return x } set { x = newValue } }

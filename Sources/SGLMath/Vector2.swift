@@ -27,6 +27,8 @@ public struct Vector2<T: ArithmeticType>: VectorType {
     public typealias UInt32Vector = Vector2<UInt32>
     public typealias BooleanVector = Vector2b
 
+    public static var elementCount: Int { 2 }
+
     public var x: T, y: T
 
     public var r: T { get { return x } set { x = newValue } }

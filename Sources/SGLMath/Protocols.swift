@@ -104,6 +104,41 @@ public protocol MatrixType: Hashable, CustomDebugStringConvertible, Sequence whe
     static func %(_: Self, _: Element) -> Self
     static func %=(_: inout Self, _: Element)
     var elements: [Element] { get }
+
+    static var elementCount: Int { get }
+}
+
+// Unsafe pointer access
+public extension MatrixType {
+    func withUnsafePointer<R>(_ body: (UnsafePointer<Element>) throws -> R) rethrows -> R {
+        try Swift.withUnsafePointer(to: self) { pointer in
+            try pointer.withMemoryRebound(to: Element.self, capacity: Self.elementCount) {
+                try body($0)
+            }
+        }
+    }
+
+    mutating func withUnsafeMutablePointer<R>(_ body: (UnsafeMutablePointer<Element>) throws -> R) rethrows -> R {
+        try Swift.withUnsafeMutablePointer(to: &self) { pointer in
+            try pointer.withMemoryRebound(to: Element.self, capacity: Self.elementCount) {
+                try body($0)
+            }
+        }
+    }
+
+    func withUnsafeBufferPointer<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R {
+        try withUnsafeBytes(of: self) { rawBuffer in
+            let buffer = UnsafeBufferPointer(start: rawBuffer.baseAddress!.assumingMemoryBound(to: Element.self), count: Self.elementCount)
+            return try body(buffer)
+        }
+    }
+
+    mutating func withUnsafeMutableBufferPointer<R>(_ body: (UnsafeMutableBufferPointer<Element>) throws -> R) rethrows -> R {
+        try withUnsafeMutableBytes(of: &self) { rawBuffer in
+            let buffer = UnsafeMutableBufferPointer(start: rawBuffer.baseAddress!.assumingMemoryBound(to: Element.self), count: Self.elementCount)
+            return try body(buffer)
+        }
+    }
 }
 
 // This protocol is only Vector2, Vector3, and Vector4

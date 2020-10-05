@@ -22,6 +22,8 @@
 public struct Matrix3x4<T: ArithmeticType>: MatrixType {
     public typealias Element = T
 
+    public static var elementCount: Int { 3 * 4 }
+
     private var x: Vector4<T>, y: Vector4<T>, z: Vector4<T>
 
     public subscript(column: Int) -> Vector4<T> {
